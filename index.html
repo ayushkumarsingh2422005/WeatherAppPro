@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://kit.fontawesome.com/9d89bb858d.js" crossorigin="anonymous"></script>
+        <title>Weather App</title>
+                <style>
+
+@import url('https://fonts.googleapis.com/css2?family=Anton&family=Chelsea+Market&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans+Condensed:wght@300;700&display=swap');
+
+*{
+    text-transform:capitalize;
+    transition-duration:1s;
+    box-sizing:border-box;
+}
+body {
+    margin:0;
+    padding:0;
+}
+.fix{
+    position:sticky;
+    top:0;
+    height:auto;
+    background-color:none;
+    width:100%;
+}
+.more{
+    width:100%;
+    height:40px;
+}
+.more > .app_name{
+    display:flex;
+    height:40px;
+    align-items: center;
+    justify-content: center;
+    padding-left:15px;
+    font-size:25px;
+    float:left;
+}
+.more > table{
+    vertical-align:middle;
+    height:40px;
+    margin-right:0%;
+    float:right;
+    font-size:20px;
+}
+.more > table td{
+    padding:0 10px;
+}
+.location_info{
+    height:20px;
+    margin:0 auto;
+    margin-top:15px;
+    display:flex;
+    align-items: center;
+    justify-content: center;
+}
+.time{
+    width:100%;
+    height:auto;
+    display:flex;
+    align-items: center;
+    justify-content: center;
+    font-size:12px;
+    color:gray;
+}
+.temp_sun_moon{
+    display:flex;
+    align-items: center;
+    justify-content: center;
+    font-size:70px;
+    font-family: 'Open Sans Condensed', sans-serif;
+    margin-top:20px;
+}
+#sun_moon_main{
+    height:70px;
+    width:70px;
+    display:block;
+    text-align:right;
+}
+#sun_moon_main > img{
+    width:100%;
+    margin-right:-10px;
+}
+.additional_info_top{
+    width:100%;
+    height:auto;
+    display:flex;
+    align-items: center;
+    justify-content: center;
+    font-size:12px;
+    color:gray;
+}
+#weather_status{
+    width:100%;
+    height:auto;
+    display:flex;
+    align-items: center;
+    justify-content: center;
+    margin-top:10px;
+}
+#humd_visb{
+    width:100%;
+    height:100px;
+    display:flex;
+    align-items: center;
+    justify-content: center;
+    padding:15px;
+}
+#humd_visb > div{
+    width:50vw;
+    height:100%;
+    display:flex;
+    align-items: center;
+    justify-content: center;
+}
+#humd_top{
+    border-radius:15px 0 0 15px;
+    border-style:solid;
+    border-color:lightgray;
+}
+#visb_top{
+    border-radius:0 15px 15px 0px;
+    border-style:solid solid solid none;
+    border-color:lightgray;
+}
+.fa_for_humd{
+    font-size:35px;
+    float:left;
+    padding:10px;
+}
+.himd_main_top_final,.himd_main_top_final1{
+    padding:10px;
+    line-height:150%;
+    font-size:13px;
+    text-transform:none !important;
+}
+.temp_hour , .temp_hour1{
+    white-space:nowrap;
+    overflow-x:scroll;
+    overflow-y:hidden;
+    margin-top:5px;
+}
+.hour{
+    width:85px;
+    height:auto;
+    padding:5px;
+    display:inline-block;
+    margin:5px;
+    border-radius:15px;
+    border-style:solid;
+    border-color:lightgray;
+}
+#hour_time{
+    display:flex;
+    align-items: center;
+    font-size:15px;
+    justify-content: center;
+}
+#hour_icon{
+    display:flex;
+    height:40px;
+    align-items: center;
+    justify-content: center;
+    background-color:none;
+}
+#hour_icon > img{
+    width:60px;
+}
+#hour_humd{
+    display:flex;
+    align-items: center;
+    justify-content: center;
+    font-size:12px;
+}
+#hour_temp{
+    margin-top:10px;
+    display:flex;
+    align-items: center;
+    justify-content: center;
+    font-size:20px;
+}
+#hour_temp_min_max{
+    display:flex;
+    align-items: center;
+    justify-content: center;
+    font-size:12px;
+    margin-top:4px;
+}
+.super_info__{
+    margin:30px auto 15px auto;
+    width:calc(100% - 10px);
+    display:grid;
+    padding:20px;
+    background-color:none;
+    border-radius:15px;
+    border-style:solid;
+    border-color:lightgray;
+}
+.super_info__ > div{
+    display:block;
+    margin-top:15px;
+}
+#super_top{
+    margin-top:0;
+}
+.alpha{
+    float:left;
+}
+.beta{
+    float:right;
+}
+/*<!--Additional templetes-->*/
+.search{
+    position:fixed;
+    height:40px;
+    width:100%;
+    background-color:none;
+    top:0;
+    left:100%;
+    background-image:url("http://openweathermap.org/img/wn/01n@2x.png");
+}
+.search::after{
+    content:" ";
+    height:40px;
+    width:100%;
+    background-color:none;
+    position:absolute;
+    top:0;
+    left:0;
+    z-index:-1;
+    filter:blur(1px);
+    background-color:black;
+    opacity:0.9;
+}
+.go_back_search{
+    float:left;
+    width:20px;
+    display:flex;
+    align-items: center;
+    justify-content: center;
+    height:40px;
+    padding-left:10px;
+    font-size:25px;
+    color:white;
+}
+#city_name_in{
+    float:right;
+    width:55%;
+    height:calc(100% - 15px);
+    margin:7.5px;
+    border-radius:20px;
+    border-style:none;
+    outline:none;
+    padding:0 10px;
+}
+#search_city_second{
+    float:right;
+    width:40px;
+    height:calc(100% - 15px);
+    margin:7.5px;
+    border-radius:20px;
+    border-style:none;
+    outline:none;
+    padding:0 10px;
+    font-size:20px;
+}
+.cover_all{
+    position:fixed;
+    height:100vh;
+    width:100vw;
+    top:0;
+    left:0;
+    background-color:black;
+    transform:scale(1);
+    background-image:url("https://cutewallpaper.org/21/loading-gif-transparent-background/Loading-gif-download-free-clipart-with-a-transparent-.gif");
+    background-repeat:no-repeat;
+    background-position:50% 40%;
+    background-size:120px 120px;
+    transition-duration:0.2s;
+}
+.cover_all::after{
+    content:"Fetching";
+    position:absolute;
+    height:12px;
+    bottom:40%;
+    width:100%;
+    left:0;
+    color:white;
+    text-align:center;
+    font-size:30px;
+    letter-spacing:5px;
+    animation:animate2 2s infinite;
+}
+@keyframes animate2{
+    0%{
+        content:"Fetching";
+    }
+    25%{
+        content:"Fetching.";
+    }
+    50%{
+        content:"Fetching..";
+    }
+    75%{
+        content:"Fetching...";
+    }
+    100%{
+        content:"Fetching...";
+    }
+    
+}
+.map_location{
+    position:fixed;
+    height:100vh;
+    width:100%;
+    background-color:white;
+    color:gray;
+    top:0;
+    left:100%;
+    transition-duration:1s;
+}
+.map_location > #map_org > iframe{
+    height:97vh;
+    width:100%;
+    border-style:none;
+}
+#close_map{
+    width:100%;
+    height:7vh;
+    font-size:30px;
+    display:flex;
+    align-items: center;
+    padding:0 7px;
+    /*justify-content: center;*/
+}
+#close_map > i{
+    width:30px;
+}
+#city_name_2{
+    text-align:right;
+    width:calc(100% - 30px);
+    display:inline-block;
+    font-size:25px;
+}
+.drop{
+    height:auto;
+    width:100px;
+    position:fixed;
+    top:40px;
+    right:-100px;
+    border-radius:20px 4px 20px 4px;
+    border-style:solid;
+    border-color:gray !important;
+    transition-duration:0.3s;
+    padding:10px;
+    overflow:scroll;
+    font-family: 'Open Sans Condensed', sans-serif;
+}
+.drop > div{
+    border-bottom:solid;
+    margin-bottom:5px;
+    border-color:gray;
+    border-width:0.5px;
+}
+#follow{
+    border-style:none;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    margin-top:20px;
+}
+li{
+    text-align:left;
+    font-family: 'Open Sans Condensed', sans-serif;
+}
+        </style>
+        <script>
+var d1 = new Object();
+var d2 = new Object();
+d1 = {
+    0:'Sun',
+    1:'Mon',
+    2:'Tue',
+    3:'Wed',
+    4:'Thu',
+    5:'Fri',
+    6:'Sat'
+}
+
+d2 = {
+    0:"January",
+    1:"February",
+    2:"March",
+    3:"April",
+    4:"May",
+    5:"June",
+    6:"July",
+    7:"August",
+    8:"September",
+    9:"October",
+    10:"November",
+    11:"December"    
+}
+var icons = {
+    "01d":"https://www.dropbox.com/s/a83vv63kauokvyb/01d%402x.png?dl=1",
+    "01n":"https://www.dropbox.com/s/rnwn42iw4y6z8r8/01n%402x.png?dl=1",
+    "02d":"https://www.dropbox.com/s/w09s8zoi80tx938/02d%402x.png?dl=1",
+    "02n":"https://www.dropbox.com/s/y1enb3t4cqdaif8/02n%402x.png?dl=1",
+    "03d":"https://www.dropbox.com/s/53cqq7i617s8omd/03d%402x.png?dl=1",
+    "03n":"https://www.dropbox.com/s/93haaxn39d4xfrn/03n%402x.png?dl=1",
+    "04d":"https://www.dropbox.com/s/x8xozyp4rt9hixq/04d%402x.png?dl=1",
+    "04n":"https://www.dropbox.com/s/x79qu4ar6g6dq3g/04n%402x.png?dl=1",
+    "09d":"https://www.dropbox.com/s/n3gn0955ilza19t/09d%402x.png?dl=1",
+    "09n":"https://www.dropbox.com/s/e9f7yfh41q03cut/09n%402x.png?dl=1",
+    "10d":"https://www.dropbox.com/s/6h4u9nhcjo3f073/10d%402x.png?dl=1",
+    "10n":"https://www.dropbox.com/s/s1fcf9xqgidcpyb/10n%402x.png?dl=1",
+    "11d":"https://www.dropbox.com/s/xo3fijawyk3y8qr/11d%402x.png?dl=1",
+    "11n":"https://www.dropbox.com/s/3lnss01edo1b3n2/11n%402x.png?dl=1",
+    "13d":"https://www.dropbox.com/s/3d2upmp17olhppx/13d%402x.png?dl=1",
+    "13n":"https://www.dropbox.com/s/p2khoqtipbuxkdu/13n%402x.png?dl=1",
+    "50d":"https://www.dropbox.com/s/h2fym36xuebqy8r/50d%402x.png?dl=1",
+    "50n":"https://www.dropbox.com/s/aoj9kdyd6hqd6t0/50n%402x.png?dl=1",
+    "dta":atob("ZmV0Y2goImh0dHBzOi8vYXBpLm9wZW53ZWF0aGVybWFwLm9yZy9kYXRhLzIuNS9mb3JlY2FzdD9xPSIrY2l0eSsiJnVuaXRzPW1ldHJpYyZhcHBpZD05YWQ2YWE2MWFlZDAzNzc1MGY4OGU4YTI2NjNlZWE2ZCIp")
+}
+/*-----------main data function ----------------*/
+function show_data(city){
+    city = city.trim();
+    async function tempr(){
+        var response= await eval(icons.dta);
+        if (response.ok){
+            $(".cover_all").css("transform","scale(0)");
+            var data= await response.json();
+            /*---- additional-------*/
+            $("#city_name").html(city);
+            $("#city_name_2").html("Locating "+city);
+            $("#map_org").html("<iframe src='https://www.google.com/maps/embed/v1/place?q="+data.city.coord.lat+","+data.city.coord.lon+"&key=AIzaSyBFw0Qbyq9zTFTd-tUY6dZWTgaQzuU17R8'></iframe>");
+            /*---- additional emd-------*/
+            $("#sun_moon_main").html(
+                "<img src='"+icons[data.list[0].weather[0].icon]+"'/>"
+            );
+            $("#temp_main").html(data.list[0].main.temp);
+            $(".additional_info_top").html(
+                data.list[0].main.temp_max+"°/"+
+                data.list[0].main.temp_min+"° Feels like "+
+                data.list[0].main.feels_like+"°"
+            );
+            $("#weather_status").html(
+                data.list[0].weather[0].main
+            );
+            $(".himd_main_top_final").html("Humidity<br>"+data.list[0].main.humidity+"%");
+            $(".himd_main_top_final1").html("Wind Speed<br>"+data.list[0].wind.speed+" m/sec<br>"+data.list[0].wind.deg+" deg");
+            var all_hr=''
+            for (var dta = 0; dta < 8; dta++){
+                let fin_date = (data.list[dta].dt_txt.split(" ")[1]).split(":")[0]+":00";
+                let fin_icon = data.list[dta].weather[0].icon;
+                let fin_humd = data.list[dta].main.humidity;
+                let fin_temp = data.list[dta].main.feels_like;
+                let fin_temx = data.list[dta].main.temp_max;
+                let fin_temm = data.list[dta].main.temp_min;
+                all_hr += getText(fin_date,fin_icon,fin_humd,fin_temp,fin_temx,fin_temm);
+            }
+            $(".temp_hour").html(all_hr);
+            var all_day = '';
+            var temp_day = '';
+            for (var dt1 in data.list){
+                if(temp_day != data.list[dt1].dt_txt.split(" ")[0]){
+                    temp_day = data.list[dt1].dt_txt.split(" ")[0];
+                    let k_d = temp_day.split("-")[2]+"/"+temp_day.split("-")[1]+"/"+temp_day.split("-")[0].slice(2,4);
+                    let fin_icon = data.list[dt1].weather[0].icon;
+                    let fin_humd = data.list[dt1].main.humidity;
+                    let fin_temp = data.list[dt1].main.feels_like;
+                    let fin_temx = data.list[dt1].main.temp_max;
+                    let fin_temm = data.list[dt1].main.temp_min;
+                    all_day += getText(k_d,fin_icon,fin_humd,fin_temp,fin_temx,fin_temm);
+                }
+            }
+            $(".temp_hour1").html(all_day);
+            $("#grnd_pre").html(data.list[0].main.grnd_level+" hPa");
+            $("#sea_pre").html(data.list[0].main.sea_level+" hPa");
+            $("#cloud").html(data.list[0].clouds.all+" %");
+            $("#visibility").html(data.list[0].visibility+" m");
+            var dkp1 = new Date(0);
+            var dkp2 = new Date(0);
+            dkp1.setUTCSeconds(data.city.sunrise);
+            dkp2.setUTCSeconds(data.city.sunset)
+            $("#rise_sun").html(dkp1.getHours()+":"+dkp1.getMinutes());
+            $("#set_sun").html(dkp2.getHours()+":"+dkp2.getMinutes());
+        }
+        else{
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'The Location '+city+' is not found',
+                footer:"Recheque the city"
+            });
+            $(".cover_all").css("transform","scale(0)");
+        }
+    }
+    tempr();
+}
+/*---------- predefined functions --------------*/
+function fetch_data(){
+    var city = $("#city_name_in").val();
+    show_data(city);
+    $(".cover_all").css("transform","scale(1)");
+}
+function srch(event){
+    var char = event.which || event.keyCode;
+    if (char == 13){
+        fetch_data();
+    }
+}
+function dark(){
+    $("body ,.map_location ,.fix ,.drop").css("background-color","black");
+    $("*").css("color","white");
+    $("input").css("color","black");
+    $(".additional_info_top , .time").css("color","gray");
+}
+function light(){
+    $("body ,.map_location ,.fix ,.drop").css("background-color","white");
+    $("*").css("color","black");
+    $(".fa-chevron-right").css("color","white");
+    $("input").css("color","black");
+    $(".additional_info_top , .time").css("color","gray");
+}
+function getText(time,icon,humd,temp,temp_min,temp_max){
+            return '<div class="hour">'+
+                '<div id="hour_time">'+time+'</div>'+
+                '<div id="hour_icon">'+
+                    '<img src="'+icons[icon]+'"/>'+
+                '</div>'+
+                '<div id="hour_humd">'+
+                    '<i class="fa fa-tint" aria-hidden="true"></i> '+
+                    humd+
+                '%</div>'+
+                '<div id="hour_temp">'+
+                    temp+
+                '°</div>'+
+                '<div id="hour_temp_min_max">'+
+                    temp_max+'°/'+temp_min+'°'+
+                '</div>'+
+            '</div>';
+}
+/*-------- main functions -------------*/
+window.onload = function(){
+    light();
+    show_data("Chunar");
+    /*----------- Style and its finctions ------------*/
+    $(".fa-search").click(function(){
+        $(".search").css("left","0");
+    });
+    $(".go_back_search").click(function(){
+         $(".search").css("left","100%");
+    });
+    $(".fa-backward").click(function(){
+        $(".map_location").css("left","100vw");
+    });
+    $("#loc_but").click(function(){
+        $(".map_location").css("left","0vw");
+    });
+    $("#search_city_second").click(fetch_data);
+    $("#reset").click(function(){
+        fetch_data();
+    });
+    $("#about").click(function(){
+        Swal.fire({
+            title: 'FEATURES',
+            html: `<ul>
+            <li>Live Location</li>
+            <li>Live Forcast</li>
+            <li>Daily Day Forcast</li>
+            <li>Hourly Forcast</li>
+            <li>Day/Night Mode</li>
+            <li>Clear UI</li>
+            <li>100% Functional</li>
+            </ul>`
+        });
+    });
+    $("#credit").click(function(){
+        Swal.fire({
+            title: 'CREDITS',
+            html: `<ul>
+            <li>Icon : Font Awsome Icons</li>
+            <li>Map : Google Map API</li>
+            <li>Weather API : Open Weather Map</li>
+            </ul>`
+        });
+    });
+    var counter0 = 0;
+    $(".fa-ellipsis-v").click(function(){
+        if (counter0 == 0){
+            $(".drop").css("right","10px");
+            counter0 = 1;
+        }
+        else {
+            $(".drop").css("right","-100px");
+            counter0 = 0;
+        }
+    });
+    var counter1 = 0
+    $("#dark_light").click(function(){
+        if (counter0 == 0){
+            $(this).html("Light Mode");
+            dark();
+            counter0 = 1;
+        }
+        else {
+            $(this).html("Dark Mode");
+            light();
+            counter0 = 0;
+        }
+    });
+    /*-------- time fucnction -------------*/
+    function time(){
+        var d = new Date();
+        var sec = d.getSeconds();
+        var min = d.getMinutes();
+        var hor = d.getHours();
+        var dat = d.getDate();
+        var mon = d.getMonth();
+        var yer = d.getFullYear();
+        var day = d.getDay();
+        var d_y = d1[day];
+        var m_n = d2[mon];
+        
+        if (sec<10){
+            sec = "0"+sec;
+        }
+        
+        if (min<10){
+            min = "0"+min;
+        }
+        
+        if (hor>12){
+            hor = hor -12 ;
+            if (hor<10){
+                hor = "0"+hor;
+            }
+            var a_p = "PM"
+            
+        }
+        else {
+            var a_p = "AM";
+            if(hor<10){
+                hor = "0"+hor;
+            }
+            
+        }
+        $(".time").html(d_y+" "+dat+" "+m_n+" "+hor+":"+min+":"+sec+" "+a_p);
+        if (a_p = "AM"){
+            $("#sun_moon_main").html()
+        }
+    }
+    setInterval(time,1000);
+    
+    
+}
+        </script>
+    </head>
+    <body>
+        <div class="fix">
+            <div class="more">
+                <div class="app_name">Weather live</div>
+                <table>
+                    <tr>
+                        <td id="loc_but">
+                            Location
+                        </td>
+                        <td>
+                            <i class="fa fa-search" aria-hidden="true"></i>
+                        </td>
+                        <td>
+                            <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="location_info">
+                <i class="fa fa-map-marker" aria-hidden="true"></i>&nbsp;
+                <span id="city_name">chunar</span>
+            </div>
+        </div>
+        <div class="time">this is time</div>
+        <div class="temp_sun_moon">
+            <span id="sun_moon_main"></span>
+            <span id="temp_main"></span>
+            <sup><sup>°</sup></sup>
+        </div>
+        <div class="additional_info_top"></div>
+        <div id="weather_status"></div>
+        <div id="humd_visb">
+            <div id="humd_top">
+                <i class="fa fa-tint fa_for_humd" aria-hidden="true"></i>
+                <span class="himd_main_top_final">
+                    Humidity<br>44%
+                </span>
+            </div>
+            <div id="visb_top">
+                <i class="fa_for_humd" aria-hidden="true">&#127786;</i>
+                <span class="himd_main_top_final1">
+                    Wind Speed<br>44%
+                </span>
+            </div>
+        </div>
+        <div style="margin-top:25px;padding:10px">Hourly</div>
+        <div class="temp_hour"></div>
+        
+        <div style="margin-top:25px;padding:10px">Daily</div>
+        <div class="temp_hour1"></div>
+        
+        <div class="super_info__">
+            <div id="super_top">
+                <span class="alpha">Ground pressure</span>
+                <span class="beta" id="grnd_pre">73</span>
+            </div>
+            <div>
+                <span class="alpha">Sea pressure</span>
+                <span class="beta" id="sea_pre">73</span>
+            </div>
+            <div>
+                <span class="alpha">Cloud</span>
+                <span class="beta" id="cloud">63</span>
+            </div>
+            <div>
+                <span class="alpha">Visibility</span>
+                <span class="beta" id="visibility">52</span>
+            </div>
+            <div>
+                <span class="alpha">Sun Rise</span>
+                <span class="beta" id="rise_sun">61</span>
+            </div>
+            <div>
+                <span class="alpha">Sun Set</span>
+                <span class="beta" id="set_sun">62</span>
+            </div>
+        </div>
+        
+        
+        
+        <!--Additional templetes-->
+        <div class="search">
+            <div class="go_back_search">
+                <i class="fa fa-chevron-right" aria-hidden="true"></i>
+            </div>
+            <button id="search_city_second">
+                 <i class="fa fa-search" aria-hidden="true"></i>
+            </button>
+            <input type="text" id="city_name_in" onkeypress="srch(event)" placeholder="City, State, Country" value="chunar"/>
+        </div>
+        <div class="cover_all"></div>
+        <div class="drop">
+            <div id="dark_light">Dark Mode</div>
+            <div id="about">Features</div>
+            <div id="credit">Credits</div>
+            <div id="reset">Reset</div>
+            <div id="follow">
+                <a href="https://www.sololearn.com/Profile/16882555/?ref=app">
+                    <img height="20px" src="https://cdn.worldvectorlogo.com/logos/sololearn-2.svg"/>
+                </a>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <a href="https://github.com/ayushkumarsingh2422005">
+                    <img height="20px" 
+                        style="border-radius:20px;" src="https://cdn1.iconfinder.com/data/icons/social-media-logos-7/64/github-512.png"/>
+                </a>
+            </div>
+        </div>
+        <div class="map_location">
+            <div id="close_map">
+                <i class="fa fa-backward" aria-hidden="true"></i>
+                <span id="city_name_2">chunar</span>
+            </div>
+            <div id="map_org">
+                <iframe frameborder="0" id="map" src="https://www.google.com/maps/embed/v1/place?q=chunar&key=AIzaSyBFw0Qbyq9zTFTd-tUY6dZWTgaQzuU17R8">
+            </div>
+        </div>
+    </body>
+</html>
